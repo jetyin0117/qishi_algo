@@ -1,0 +1,33 @@
+Leetcode problem #153: Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand. You may assume no duplicate exists in the array.
+
+1. Idea
+
+
+2. C++ Implementation Code
+
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        return findMin(nums, 0, nums.size()-1);    
+    }
+
+private:
+    int findMin(vector<int>& nums, int left, int right)
+    {   
+        // Define the base case
+        if (left == right) return nums[left];
+        
+        int middle = (left + right) / 2;
+        // Compare the value at middle with that at right, as middle cannot equal right, if left < right
+        if (nums[middle] < nums[right])
+        {
+            right = middle; // to reduce right, as middle < right
+        }
+        else 
+        {
+            left = middle + 1; // to increase left
+        }
+        
+        return findMin(nums, left, right);
+    }
+};
