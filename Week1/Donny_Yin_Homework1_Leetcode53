@@ -1,1 +1,71 @@
-Test
+1. Idea: 
+Step 1: Define the base case
+When left > right, return the minimum value
+
+Step 2: Split the problem into subproblems and solve them recursively
+Assume the array nums[left, right] have the max subarray over the interval [i, j], where i>=left and j<=right. If we take the middle point middle = (left + right) / 2, then we have the following 3 cases for max subarray
+
+Case 1: Subarray is entirely in nums[i, middle - 1]
+Case 2: Subarray is entirely in nums[middle + 1, j]
+Case 3: Subarray is across the middle point
+
+For Case 1 and Case 2, we can just call the function recursively
+For Case 3, we need to start from the middle, and find the max value to the left-side and to the right-side, 
+which indicates to find the max subarray nums[i,middle] from nums[left, middle] and find the max subarray
+nums[middle,j] from nums[middle,right]. Summing the value nums[i,middle] and nums[middle,j] generate the value
+under Case 3
+
+Step 3: Merge the solutions for the subproblems to obtain the solution for the orignal problem
+Merge the subporoblem solutions by max(leftMax, rightMax, crossSum)
+
+2. C++ Code
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int maxValue = INT_MIN;
+        return maxSubArray(nums, 0, nums.size()-1, maxValue);    
+    }
+
+private:
+    int maxSubArray(vector<int>& nums,int left, int right, int& maxValue) {
+        // Define base cases
+        if (left > right) {return INT_MIN;}
+        
+        int middle = (left + right) / 2;
+        // Case 1: Max subarray appears on the left of middle point
+        int leftMax = maxSubArray(nums, left, middle - 1, maxValue);
+        
+        // Case 2: Max subarray appears on the right of middle point
+        int rightMax = maxSubArray(nums, middle + 1, right, maxValue);
+        maxValue = max(maxValue, leftMax);
+        maxValue = max(maxValue, rightMax);
+        
+        // Case 3: Max subarray apears across the middle point
+        // Find the max value in the left side
+        int sum = 0, mlmax = 0;
+        for (int i = middle - 1; i >= left; i--){
+            sum += nums[i];
+            if (sum > mlmax){mlmax = sum;}
+        }
+        
+        // Find the max value in the right side
+        sum = 0; int mrmax = 0;
+        for (int i = middle + 1; i <= right; i++){
+            sum += nums[i];
+            if (sum > mrmax) {mrmax = sum;}
+        }
+        
+        // Merge all three cases
+        maxValue = max(maxValue, mlmax + mrmax + nums[middle]);
+        
+        return maxValue;
+    }
+};
+
+3. Complexity Analysis
+1) Time Complexity: Based on the divide-and-conquer algorithm, the running time satisfies the following equation:
+T(N) = 2T(N/2) + O(N)
+Based on Master Theorem, the overall running time is: O(N log N)
+
+2) Space Complexity: O(Log N), in order to keep the recursion stack
