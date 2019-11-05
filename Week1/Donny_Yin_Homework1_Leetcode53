@@ -1,3 +1,5 @@
+Leetcode problem #53: Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
+
 1. Idea: 
 Step 1: Define the base case
 When left > right, return the minimum value
@@ -18,7 +20,8 @@ under Case 3
 Step 3: Merge the solutions for the subproblems to obtain the solution for the orignal problem
 Merge the subporoblem solutions by max(leftMax, rightMax, crossSum)
 
-2. C++ Code
+
+2. C++ Implementation Code
 
 class Solution {
 public:
