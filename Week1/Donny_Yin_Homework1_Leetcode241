@@ -1,1 +1,45 @@
-t
+Leetcode Problem #241: Different Ways to Add Parentheses
+Given a string of numbers and operators, return all possible results from computing all the different possible ways to group numbers and operators. The valid operators are +, - and *.
+
+1. Idea
+Try to write the original problem as ()?(), so that we can use divide and conquer algorithm, where ? stands for an operator, e.g. '+', '-', or '*'. 
+1) Define the base case: when the input vector only has numbers or empty
+2) Divide to subproblems: to divide the original problem into ()?(), where each () can hook up the function itself
+3) Merge the subproblem results: calculate all possible combination of results depending on the operator ?
+
+Note: this algorithm has the drawback of lots of duplicated calculations, and the output contains lots of duplicated values
+
+2. C++ Implementation Code
+
+class Solution {
+public:
+    vector<int> diffWaysToCompute(string input) {
+        vector<int> res;
+        for (int i=0;i < input.size(); i++){
+            if (input[i] == '+' || input[i] == '-' || input[i] == '*'){
+                // Divide to 2 subproblems
+                vector<int> left = diffWaysToCompute(input.substr(0,i));
+                vector<int> right = diffWaysToCompute(input.substr(i+1,input.size()));
+                
+                // Merge the results of two subproblems together
+                for (int j=0; j < left.size(); ++j){
+                    for (int k = 0; k<right.size();++k){
+                        if (input[i] == '+') res.push_back(left[j] + right[k]);
+                        else if (input[i] == '-') res.push_back(left[j]-right[k]);
+                        else res.push_back(left[j]*right[k]);
+                    }
+                }
+            }
+        }
+        
+        // Define the base case: input is just a number or empty array
+        if (res.empty())  res.push_back(stoi(input));
+        
+        return res;
+    }
+};
+
+
+3. Complexity Analysis
+Time complexity: for each i in the loop, we need O(N log N). so overall, we need O(N^2 log N) for running time
+Space complexity: O(N), to allocate the output vector res
