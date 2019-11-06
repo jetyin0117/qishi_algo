@@ -1,0 +1,40 @@
+Leetcode Problem #932: Beautiful Array
+For some fixed N, an array A is beautiful if it is a permutation of the integers 1, 2, ..., N, such that:
+For every i < j, there is no k with i < k < j such that A[k] * 2 = A[i] + A[j].
+Given N, return any beautiful array A.  (It is guaranteed that one exists.)
+
+1. Idea
+I noticed that 2*A[k] is even, and we can put the odd numbers to the left side of k, and even nubmers to the right side, then A[i] + A[j] is odd, and can never be equal to the 2*A[k]. In addition, we need the following the properties:
+
+(1) If A is a beautiful array, then A + x is also a beautiful array
+(2) If A is a beautiful array, then A * x is also a beautiful array
+
+Step 1: Define the base case: return 1, when N==1
+Step 2: Divide to 2 subproblems: A[(N+1)/2] and A[N/2]
+Step 3: Merge the subproblem results: merge the resuls by performing the transformation
+
+2. C++ Implementation Code
+
+class Solution {
+public:
+    vector<int> beautifulArray(int N) {
+        // Define the base case: N==1
+        if (N==1) return {1};
+        
+        // Divide to 2 subproblems
+        vector<int> left = beautifulArray((N + 1)/2);
+        vector<int> right = beautifulArray(N/2);
+        
+        // Merge the subproblem results
+        vector<int> res;
+        for (int x: left) res.push_back(2*x - 1);
+        for (int x: right) res.push_back(2*x);
+        
+        return res;
+    }
+};
+
+
+3. Complexity Analysis
+Time complexity: T(N) = 2*T(N/2) + O(N). Based on Master theorem, the time complexity is O(N log N)
+Space complexity: O(N), to store the output array res
