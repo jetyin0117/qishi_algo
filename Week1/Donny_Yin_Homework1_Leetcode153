@@ -3,6 +3,7 @@ Leetcode problem #153: Suppose an array sorted in ascending order is rotated at 
 1. Idea
 Use binary search algorithm. The min value will appear in the interval where the left is larger than the right.
 
+
 2. C++ Implementation Code
 
 class Solution {
