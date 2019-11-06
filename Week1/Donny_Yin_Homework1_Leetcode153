@@ -1,7 +1,7 @@
 Leetcode problem #153: Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand. You may assume no duplicate exists in the array.
 
 1. Idea
-
+Use binary search algorithm. The min value will appear in the interval where the left is larger than the right.
 
 2. C++ Implementation Code
 
@@ -17,7 +17,7 @@ private:
         // Define the base case
         if (left == right) return nums[left];
         
-        int middle = (left + right) / 2;
+        int middle = (left + right) / 2; 
         // Compare the value at middle with that at right, as middle cannot equal right, if left < right
         if (nums[middle] < nums[right])
         {
@@ -31,3 +31,8 @@ private:
         return findMin(nums, left, right);
     }
 };
+
+
+3. Complexity Analysis
+Time complexity: O(log N), the same as binary search
+Space complexity: O(1), no additional space needed
