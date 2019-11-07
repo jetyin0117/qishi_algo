@@ -1,0 +1,59 @@
+lintcode461: Kth Smallest Numbers in Unsorted Array
+Find the kth smallest number in an unsorted integer array.
+
+
+1. Idea
+Leverage the idea of quick select, where the values larger than the pivot move to the right and the smaller values to the left. 
+
+Step 1: Select a pivot value (e.g. the value in the middle of array)
+Step 2: Move the values larger than pivot to the right, and smaller values to the left
+Step 3: Divide to subproblems:
+1) If the number of values on the left > k, then the kth smallest element is on the left side
+2) If the number of values on the left < k, then the kth smallest element is on the right side at (k - (left - start))th element
+
+
+2. C++ Implementation Code
+
+class Solution {
+public:
+    int kthSmallest(int k, vector<int>& nums){
+        int n = nums.size();
+        if (n == 0 || n < k) return -1;
+        return quickSelect(nums, k, 0, n-1);
+    }
+
+private:
+    int quickSelect(vector<int>& nums, int k, int start, int end){
+        // Define the base case
+        if (start > end) return nums[start];
+        
+        int left = start, right = end;
+        int pivot = nums[(left + right)/2];
+
+        // Put the values larger than pivot to the right, and smaller to the left
+        while (left <= right){
+            // Skip the values that already in order
+            while (left <= right && nums[left] < pivot) left++;
+            while (left <= right && nums[right > pivot]) right--;
+            
+            // Swap the left and right, so that both are in order
+            if (left <= right) {
+                swap(nums[left], nums[right]);
+                left++;
+                right--;
+            }
+        }
+        
+        // Divide into left cases and right cases
+        if (start + k - 1 <= right) return quickSelect(nums, k, start, right);
+        if (start + k - 1 >= left) return quickSelect(nums, k - (left - start), left, end);
+        
+        // return the case where there are equal values in the middle in the internal (right, left)
+        return nums[right + 1];
+    }
+};
+
+
+3. Complexity Analysis
+Time complexity: O(N)? Not sure why it is O(N)
+Space complexity: O(1), as no additional space is required 
