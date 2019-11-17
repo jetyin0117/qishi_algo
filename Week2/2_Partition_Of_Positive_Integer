@@ -1,0 +1,60 @@
+C++ code implementation
+
+
+#include <iostream>
+
+using namespace std;
+
+int dp[10000],c;
+
+// Function to generate the unique partition array for positive integer n and print it
+void find_unique_partitions(int idx, int remVal, int maxVal)
+{
+    // remVal is the remaining value still need to be formed
+    // maxVal is the max number that can be used in the formation of remVal
+    int i=0;
+    if (remVal== 0)
+    {
+        for (i=1; i<idx; i++)
+            cout<<dp[i]<<" ";
+        cout<<endl;
+        c++;
+    }
+    else {
+        for(i=maxVal; i>=1; i--)// since a partition value "i" cannot exceed maxVal and cant be less than 1.
+        {
+            if (i>remVal)
+                continue;
+            else{
+                dp[idx] = i; // allocate i to the current index
+                find_unique_partitions( idx+1, remVal-i, i); // now maxVal is updated to be i
+            }
+        }
+    }
+    return ;
+}
+
+int main()
+{
+    int n;
+    cout<<"Enter the number( positive integer): ";
+    cin>>n;
+    cout<<"Following are the unique partitions: "<< endl;
+    find_unique_partitions(1, n, n);
+    cout<<"Total no. of unique partitions: "<< c << endl;
+
+    return 0;
+}
+
+
+Output
+Enter the number( positive integer): 5                                                                                                                                               
+Following are the unique partitions:                                                                                                                                                 
+5                                                                                                                                                                                    
+4 1                                                                                                                                                                                  
+3 2                                                                                                                                                                                  
+3 1 1                                                                                                                                                                                
+2 2 1                                                                                                                                                                                
+2 1 1 1                                                                                                                                                                              
+1 1 1 1 1                                                                                                                                                                            
+Total no. of unique partitions: 7
